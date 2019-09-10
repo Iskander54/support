@@ -1,0 +1,18 @@
+#exemple of CI on gitlab
+
+image: alpine:latest 
+
+stages:
+  - check
+
+before_script:
+  - apk update
+  - apk add libxml2 libxml2-utils
+
+validates:
+  stage: check
+  tags:
+    - analysis
+  allow_failure: true
+  script:
+    - for f in ./sate6_reports/*.xml; do xmllint --noout --schema ./scripts/sate6-format.xsd "$f"; done;
